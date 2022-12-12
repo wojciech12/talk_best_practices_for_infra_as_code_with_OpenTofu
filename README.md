@@ -6,6 +6,8 @@ Większość organizacji zaczyna od Terraforma uruchamianego z lokalnych maszyn,
 
 W czasie mojej prezentacji omówię najlepsze praktyki w każdej z tych faz oraz narzędzi dla Terraforma, które pozwalają przesunąć-w-lewo takie aspekty jak bezpieczeństwo czy zarządzanie kosztami.
 
+Prezentacja: [slajdy](main_pl.pdf).
+
 [Architektura i Kontenery](https://architekturaikontenery.pl)
 
 <!-- ## PL
