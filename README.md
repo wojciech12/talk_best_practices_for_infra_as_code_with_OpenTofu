@@ -10,4 +10,4 @@ Prezentacja: [slajdy](main_pl.pdf).
 
 [Architektura i Kontenery](https://architekturaikontenery.pl)
 
-Questions? feedback? Let me know - wojciechb at spacelift.io, I am also on the Gophers, CloudNative, and Kubernetes slacks (`Wojciech B`).
+Questions? feedback? Let me know - `wojciechb at spacelift.io`, I am also on the Gophers, CloudNative, and Kubernetes slacks (`Wojciech B`).
