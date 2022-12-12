@@ -1,4 +1,4 @@
-# 10 najlepszych praktykdla Infrastructure-as-a-Codena przykładzie Terraforma
+# 10 najlepszych praktyk dla Infrastructure-as-a-Code na przykładzie Terraforma
 
 Infastructure-as-a-Code jest u podstawy każdej efektywnej organizacji budującej lub utrzymującej oprogramowanie na publicznej lub prywatnej chmurze.
 
