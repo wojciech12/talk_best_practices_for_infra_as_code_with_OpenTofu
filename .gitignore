@@ -1,3 +1,6 @@
 ~$main_pl.pptx
 **/.terraform.lock.hcl
 **/.terraform/*
+s
+demo_2/*.out
+demo_2/*_out.json
