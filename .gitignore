@@ -1,7 +1,8 @@
-~$main_pl.pptx
 **/.terraform.lock.hcl
 **/.terraform/*
-s
+*/*.tfstate
+**/*.tfstate.backup
+
 demo_2/*.out
 demo_2/*_out.json
 demo_2/results.json

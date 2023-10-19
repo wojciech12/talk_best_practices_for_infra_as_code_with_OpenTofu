@@ -1,0 +1,594 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>10 najlepszych praktyk dla Infrastructure-as-a-Code na przykładzie OpenTofu/Terraforma</title>
+
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="ext/bootstrap-5.3.0-alpha3/bootstrap.min.css">
+
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<style>
+			.reveal section img {
+				background-color:white;
+				border:0;
+				box-shadow: 0 0 0 0;
+			}
+
+			.reveal h3 {
+				text-transform: none;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section>
+
+					<h3>10 najlepszych praktyk<br /> dla Infrastructure-as-a-Code</h3>
+
+					<img width="30%" src="img/openfotu-on-light.png" />
+
+					<p><small>Wojciech Barczynski | Spacelift.io</small></p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+
+### Co to jest OpenTofu / Terraform?
+
+[Demo](https://github.com/wojciech12/talk_best_practices_for_infra_as_a_code_with_Terraform/tree/master/demo_1):
+
+<pre><code data-trim data-noescape>
+variable "repository_name" {
+  type    = string
+  default = "my_app"
+}
+
+resource "github_repository" "my_repo" {
+  name        = var.repository_name
+  description = "My Azure App repository created by OpenTofu!"
+  visibility = "public"
+}</code></pre>
+							</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">				
+### Dlaczego OpenTofu/Terraform FOSS?
+
+1. <code>tofu plan</code> – co się zmieni
+2. <code>tofu apply</code> – wykonanie planu;
+3. plik stanu – korzyści ([demo](https://github.com/wojciech12/talk_best_practices_for_infra_as_a_code_with_Terraform/tree/master/demo_2)):
+   
+   - shifting X left,
+   - polityki,
+   - drift detection.
+					</script>
+				</section>
+
+				<section data-background="img/lingua_franca.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">				
+### Dlaczego OpenTofu/Terraform FOSS?
+
+- Doskonała dokumentacja ([tf](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)/[ot](https://opentofu.org/docs/)),
+- Bogaty ecosystem.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Infrastructure-as-a-Code
+
+Cel, gwiazda północy:
+
+- zaangażowanie najszerszej grupy inżynierów;
+- zaagażowanie: można zajrzeć do środka i kontrybuować;
+- zaagażowanie: blisko konsumentów zasobów.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Infrastructure-as-a-Code
+
+Niewłaściwe podejście na początku,<br />może prowadzić do trudności później.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 1/10: Remote state
+
+Implementacje z locks:
+
+- Azure storage ([docs](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?));
+- AWS s3 + DynamoDB;
+- Google Cloud Storage.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 1/10: Remote state
+
+Nie zapomnij o:
+
+- <code>.gitignore</code>
+- <code>.dockerignore</code>
+					</script>
+				</section>
+
+				<!-- section data-markdown>
+					<script type="text/template">
+### 1/10: Remote state
+
+Nie zapomnij o:
+
+- <code>.gitignore</code>
+- <code>.dockerignore. </code>
+					</script>
+				</section -->
+
+				<section data-markdown>
+					<script type="text/template">
+### 2/10: Struktura projektu
+
+Mono-repo (per env/app):
+<pre>infrastructure.git/
+ |- modules/
+ |  |- network
+ |  \- service-a/
+ |
+ |- production/
+ |   \- service-a/
+ |
+...</pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 2/10: Struktura projektu
+
+Close to the application: 
+<pre>my_app.git/
+ |- app/
+ |- infra/
+ |   \- ...tf
+ |
+...</pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 2/10: Struktura projektu
+
+- copy&paste jest najłatwiejszym długiem do spłacenia;
+- Nie musisz od pierwszego dnia, mieć własne moduły;
+- Wykorzystuj dostępne moduły z community.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 3/10: Wiele mniejszych stack/stanów
+
+- Najmniejszy możliwy, na przykład, per komponent;
+- Unikamy czytania wartości z innych stanów;
+- Bardzo łatwo o rigid infrastructure :/.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 3/10: Rigid infrastructure?
+
+- Wymagane wysokie uprawnienia do zarządzania,
+- Twarde zależności między stanami,
+- Zbyt (wcześnie) opinionated moduły,
+- Cykliczne zależności.
+					</script>
+				</section>		
+
+				<section data-markdown>
+					<script type="text/template">
+### 3/10: Rozwiązanie
+
+- odczytywanie stanu zasobów z chmury;
+- **key/value store** (Azure Config / AWS SSM / HC Consul);
+- Spacelift: [context](https://docs.spacelift.io/concepts/configuration/context) oraz [stack dependencies](https://docs.spacelift.io/concepts/stack/stack-dependencies).
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 5/10: Konwencje nazewnictwa
+
+1. Use underscores(_) as a separator and lowercase letters in names;
+2. No *resource type* in the *resource name*;
+3. Always use descriptive names for variables and outputs, and remember to include a description.
+					</script>
+				</section>
+				<!-- https://spacelift.io/blog/terraform-best-practices#6-use-a-consistent-naming-convention -->
+
+				<section data-markdown>
+					<script type="text/template">
+### 5/10: Konwencje nazewnictwa
+
+Więcej na:
+
+- [Developer Terraform Docs](https://developer.hashicorp.com/terraform/plugin/best-practices/naming),
+- [Microsoft Azure](https://microsoft.github.io/code-with-engineering-playbook/continuous-delivery/recipes/terraform/terraform-structure-guidelines/),
+- np., [terraform-null-label](https://github.com/cloudposse/terraform-null-label).
+					</script>
+				</section>
+				<!-- https://microsoft.github.io/code-with-engineering-playbook/continuous-delivery/recipes/terraform/terraform-structure-guidelines/ -->
+
+				<section>
+					<h3>6/10: Pinning wersji dla wszystkiego</h3>
+					<div class="container">
+
+						<div class="row">
+							<div class='col-md-6'>
+								<img width="100%" style="object-fit: fill;" src="img/pinning.png" />
+							</div>
+							<div class='col-md-6'>
+								<ul>
+									<li>Providers – minimum version</li>
+									<li>Modules i wersje OpenTofu/Terraforma - exact</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 6/10: Narzędzia
+
+1. <code>tofu plan</code> - daje nam możliwość sprawdzenia zmian przed ich zaaplikowaniem,
+
+2. Czyli możemy wiele weryfikacji przesunąć w „lewo”.
+
+					</script>
+				</section>
+
+				<!-- section data-markdown>
+					<script type="text/template">
+### 6. Narzędzia
+
+Warto dodać do CI/CD albo git .pre-commit:
+
+- Formatowanie: `tofu fmt`
+
+					</script>
+				</section -->
+
+				<section data-markdown>
+					<script type="text/template">
+### 6/10: Narzędzia
+
+Warto dodać do CI/CD albo git .pre-commit:
+
+- Lintery: `tofu fmt` & `tflint`
+- Bezpieczeństwo: `tfsec`, `kics` i `checkcov`
+- Estymacja kosztów: `tf-cost-estimation` & `infracost`
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 6/10: Narzędzia
+
+Warto dodać do CI/CD albo git .pre-commit:
+
+- Polityki: [conftest](https://github.com/open-policy-agent/conftest/tree/master/examples/hcl2) & [OpenPolicyAgent](https://www.openpolicyagent.org/):
+
+  - [Ostrzeż, że kasujemy lub odtwarzamy](https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/blob/main/catalog/policies/plan.warn-on-deletions-and-recreations.rego),
+  - [Etykiety na zasobach wymagane](https://github.com/spacelift-io/spacelift-policies-example-library/blob/main/plan/enforce-tags-on-resources.rego).
+
+<p><small>TACOS takie jak Spacelift, Env0, Scalr mają gotowe integracje</small></p>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 7/10: Continuous Deployment
+
+1. Warto zacząć od Continuous Integration;
+2. Kiedy demokratyzujemy dostęp i skalujemy, Continuous Deployment jest niezbędne;
+
+Opcje: generic CI, Atlantis (open source), Env0, Scalr, Spacelift.io.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 8/10: Demokratyzacja
+
+To tylko kwestia czasu:
+
+- Rośnie zespół,
+- Trudno zatrudnić Platform czy System Cloud/DevOps inżynierów,
+- Product teams.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 8/10: Demokratyzacja
+
+1. Zaczynamy od jednej osoby w zespole, np., infra champion,
+2. Opcjonalnie - przydzieleniem jeden osoby z zespołu devOps / platformy (tymcasowo).
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 8/10: Demokratyzacja
+
+Będzie łatwiej:
+
+1. Jeśli nie mamy hard dependencies między stanami;
+2. Nie potrzeba, najwyższych uprawnień do postawienia każdego z serwisów.
+					</script>
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+### 8/10: Demokratyzacja
+
+Będzie łatwiej:
+
+- Dobrze mieć CD na generycznym CI lub TACOS,
+- Praca oparta o Pull Requesty,
+- W pierwszej iteracji, może być copy&paste planu w Pull Request,
+- Więcej wspólnych (małych) modułów.
+					</script>
+				</section>
+
+				<section>
+					<h3>8/10: Demokratyzacja</h3>
+					<div class="container">
+
+						<div class="row">
+							<div class='col-md-6'>
+								<img width="100%" style="object-fit: fill;" src="img/conventions.png" />
+							</div>
+							<div class='col-md-6'>
+								<ul>
+									<li>Zacząć od wspólnych konwencji... potem narzędzia/moduły</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 9/10: Skalowanie
+
+- Template-y dla nowych serwisów,
+- Współdzielenie najlepszych praktyk i polityk,
+- Więcej wspólnych modułów,
+- Tymczasowe środowiska,
+- Drift-detection.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 9/10: Skalowanie
+
+Template-y dla nowych serwisów:
+
+- Konwencje,
+- No-black magic,
+- Nie jestem fanem, custom YAML czy JSON,
+- Możliwe uruchomienie lokalne.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 9/10: Skalowanie
+
+Drift detection:
+
+- Zmiany w konsoli na chwilę,
+- Upewnienie się, że rzadko dotykany moduł działa,
+- Sprzątanie po eksperymentach.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 9/10: Skalowanie
+
+Mono repozytorium czy per komponent:
+
+- To zależy od firmy.
+
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 10/10: Metryki
+
+- Pierwsze sukcesy łatwo odczuć,
+- Później trudniej mierzyć podstępy,
+- Co więc mierzyć?
+					</script>
+				</section>
+
+				<section data-background="img/high_perf_engineering.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+### 10/10: Metryki
+
+Deployment frequency:
+
+1. Łatwe do uchwycenia przy gitops,
+2. Zakończenie pipeline lub po prostu merge do brancha produkcyjnego.
+					</script>
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+### 10/10: Metryki
+
+Lead time:
+
+1. Od utworzenia Pull Request jako draft
+2. Do wprowadzenia na produkcję (merge do master/prod)
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 10/10: Metryki
+
+Obecnie używam:
+
+- Google Colab Notebook,
+- Exportery do Google BigQuery z: Github oraz ClickUp.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Podsumowanie
+
+- Celem jest zaangażowanie najszerszej grupy inżynierów,
+- Terraform/Opentofu jest najbardziej dojrzałą platformą,
+- Większość tych praktyk, stosuje się do innych platform od AWS Cloudformation, CDK, CDK-TF, po Kubernetes.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Kubernetes and OpenTofu/Terraform
+
+Często padające pytanie:
+
+- OpenTofu/Terraform do postawienia K8S + ArgoCD, Crossplane, lub flux (last mile);
+- Gitops na Kubernetesie przejmuje life-cycle aplikacji.
+					</script>
+				</section>
+
+				<section>
+					<div class="container">
+						<div class="row">
+							<div class='col-md-6'>
+								<img width="100%" style="object-fit: fill;" src="img/analogia_frigate_pallada.jpg" />
+								<!-- https://www.flickr.com/photos/mustadmarine/49842649546/ -->
+							</div>
+							<div class='col-md-6'>
+								<h3>Dziękuję<br />za uwagę</h3>
+								<br />
+								<br />
+								<p><small><a href="https://github.com/wojciech12/talks">github.com/wojciech12/talks</a></small></p>
+							</div>
+						</div>
+					</div>
+				</section>
+
+			<section data-markdown>
+				<script type="text/template">
+#### Backup Slides
+
+<!-- img width="70%" src="img/Rubber_Duck_Sea_by_whispering_hills_1000_673_84_c1.jpg" -->
+				</script>
+			</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Kubernetes and OpenTofu/Terraform
+
+Często padające pytanie:
+
+- OpenTofu/Terraform do postawienia K8S + ArgoCD, Crossplane, lub flux (last mile);
+- Gitops na Kubernetesie przejmuje life-cycle aplikacji.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Rabbit holes everywhere...
+
+Approach:
+
+- The iteration, decision, and deliver
+- As soon as possible to get into the cycle Patch Patch Patch
+
+Alternative take:
+
+- [Tracer bullet development](https://wiki.c2.com/?TracerBullets),
+- [Lean v1/v2](https://katemats.com/blog/lean-software-development-build-v1s-and-v2s
+).
+					</script>
+				</section>
+
+				<section data-background="img/books.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### OODA
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/OODA.Boyd.svg" />
+					</script>
+				</section>
+
+			</div>
+		</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/dependencies.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
