@@ -24,17 +24,19 @@ tofu plan -input=false -out=tofu_plan.out
 tofu show -json tofu_plan.out > tofu_plan_out.json
 ```
 
-Jest wiele narzędzi (([popularne narzędzia OSS, które często widzimy](https://spacelift.io/blog/integrating-security-tools-with-spacelift))), które działając na planie może wcześnie w procesie deploymentu wyłapać błędy:
+Jest wiele narzędzi, które działając na planie może wcześnie w procesie deploymentu wyłapać błędy:
 
 - [tfsec](https://github.com/aquasecurity/tfsec):
 
 
-   ```bash
-   tfsec
-   ```
+  ```bash
+  tfsec
+  ```
 
-- [tflint](https://github.com/terraform-linters/tflint):
+- [kics](https://docs.kics.io/):
 
-   ```bash
-   docker run --rm -v $(pwd):/data -t ghcr.io/terraform-linters/tflint-bundle
-   ```
+  ```bash
+  docker run -v .:/tf checkmarx/kics:latest scan -p "/tf" -o "/tf/"
+  ```
+
+Lista popularnych narzędz OSS do skanowania kodu, które często widzimy -- [artykuł](https://spacelift.io/blog/integrating-security-tools-with-spacelift).
