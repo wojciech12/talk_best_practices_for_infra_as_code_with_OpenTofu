@@ -41,7 +41,7 @@ Jest wiele narzędzi, które działając na planie może wcześnie w procesie de
 
 Lista popularnych narzędz OSS do skanowania kodu, które często widzimy -- [artykuł](https://spacelift.io/blog/integrating-security-tools-with-spacelift).
 
-## Polityki
+## Polityki z Rego (OpenPolicyAgent)
 
 Przykład z artykułu [TF at scale](https://spacelift.io/blog/scalable-infrastructure):
 
