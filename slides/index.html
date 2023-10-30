@@ -114,7 +114,7 @@ Cel, gwiazda północy:
 					<script type="text/template">
 ### Infrastructure-as-a-Code
 
-Niewłaściwe podejście na początku,<br />może prowadzić do trudności później.
+Niewłaściwe podejście na początku może prowadzić do trudności później.
 					</script>
 				</section>
 
@@ -125,7 +125,7 @@ Niewłaściwe podejście na początku,<br />może prowadzić do trudności póź
 Implementacje z locks:
 
 - Azure storage ([docs](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?));
-- AWS s3 + DynamoDB;
+- AWS S3 + DynamoDB;
 - Google Cloud Storage.
 					</script>
 				</section>
@@ -188,7 +188,7 @@ Close to the application:
 ### 2/10: Struktura projektu
 
 - copy&paste jest najłatwiejszym długiem do spłacenia;
-- Nie musisz od pierwszego dnia, mieć własne moduły;
+- Nie musisz od pierwszego dnia mieć własne moduły;
 - Wykorzystuj dostępne moduły z community.
 					</script>
 				</section>
@@ -228,9 +228,9 @@ Close to the application:
 					<script type="text/template">
 ### 5/10: Konwencje nazewnictwa
 
-1. Use underscores(_) as a separator and lowercase letters in names;
-2. No *resource type* in the *resource name*;
-3. Always use descriptive names for variables and outputs, and remember to include a description.
+1. Używaj podkreśleń(_) jako seperatorów w nazwach. Pisz nazyw małymi literami.
+2. Nie dodawaj typu zasobu do nazw zasobów.
+3. Zawsze używaj opisowych nazw dla zmiennych wejściowych (variables) i wyjściowych (outputs). Używaj opisów! (description)
 					</script>
 				</section>
 				<!-- https://spacelift.io/blog/terraform-best-practices#6-use-a-consistent-naming-convention -->
@@ -272,7 +272,7 @@ Więcej na:
 
 1. <code>tofu plan</code> - daje nam możliwość sprawdzenia zmian przed ich zaaplikowaniem,
 
-2. Czyli możemy wiele weryfikacji przesunąć w „lewo”.
+2. Czyli możemy weryfikacje przesunąć w „lewo” - sprawdzamy co zostanie uruchomione i/lub zmienione jeszcze przed wykonaniem kodu.
 
 					</script>
 				</section>
@@ -295,7 +295,7 @@ Warto dodać do CI/CD albo git .pre-commit:
 Warto dodać do CI/CD albo git .pre-commit:
 
 - Lintery: `tofu fmt` & `tflint`
-- Bezpieczeństwo: `tfsec`, `kics` i `checkcov`
+- Bezpieczeństwo: `tfsec`, `kics` i `checkov`
 - Estymacja kosztów: `tf-cost-estimation` & `infracost`
 					</script>
 				</section>
@@ -342,8 +342,8 @@ To tylko kwestia czasu:
 					<script type="text/template">
 ### 8/10: Demokratyzacja
 
-1. Zaczynamy od jednej osoby w zespole, np., infra champion,
-2. Opcjonalnie - przydzieleniem jeden osoby z zespołu devOps / platformy (tymcasowo).
+1. Zaczynamy od jednej osoby w zespole, np. infra champion,
+2. Opcjonalnie - przydzielmy jedną osobę z zespołu DevOps / platformy (tymczasowo).
 					</script>
 				</section>
 
@@ -354,7 +354,7 @@ To tylko kwestia czasu:
 Będzie łatwiej:
 
 1. Jeśli nie mamy hard dependencies między stanami;
-2. Nie potrzeba, najwyższych uprawnień do postawienia każdego z serwisów.
+2. Nie potrzeba najwyższych uprawnień do postawienia każdego z serwisów.
 					</script>
 				</section>
 
@@ -366,7 +366,7 @@ Będzie łatwiej:
 Będzie łatwiej:
 
 - Dobrze mieć CD na generycznym CI lub TACOS,
-- Praca oparta o Pull Requesty,
+- Praca oparta o Pull Request'ach,
 - W pierwszej iteracji, może być copy&paste planu w Pull Request,
 - Więcej wspólnych (małych) modułów.
 					</script>
@@ -430,7 +430,7 @@ Drift detection:
 					<script type="text/template">
 ### 9/10: Skalowanie
 
-Mono repozytorium czy per komponent:
+Mono repozytorium czy repozytorium per komponent:
 
 - To zależy od firmy.
 
@@ -442,7 +442,7 @@ Mono repozytorium czy per komponent:
 ### 10/10: Metryki
 
 - Pierwsze sukcesy łatwo odczuć,
-- Później trudniej mierzyć podstępy,
+- Później trudniej mierzyć postępy,
 - Co więc mierzyć?
 					</script>
 				</section>
@@ -491,7 +491,7 @@ Obecnie używam:
 
 - Celem jest zaangażowanie najszerszej grupy inżynierów,
 - Terraform/Opentofu jest najbardziej dojrzałą platformą,
-- Większość tych praktyk, stosuje się do innych platform od AWS Cloudformation, CDK, CDK-TF, po Kubernetes.
+- Większość tych praktyk, stosuje się do innych platform od AWS CloudFormation, CDK, CDK-TF, po Kubernetes.
 					</script>
 				</section>
 
@@ -499,7 +499,7 @@ Obecnie używam:
 					<script type="text/template">
 ### Kubernetes and OpenTofu/Terraform
 
-Często padające pytanie:
+Często zadawane pytanie:
 
 - OpenTofu/Terraform do postawienia K8S + ArgoCD, Crossplane, lub flux (last mile);
 - Gitops na Kubernetesie przejmuje life-cycle aplikacji.
