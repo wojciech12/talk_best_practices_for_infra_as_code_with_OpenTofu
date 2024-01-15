@@ -1,4 +1,4 @@
-# Demo 2: az i shifting-left security
+# Demo 2: shift-left X dzięki tofu plan
 
 ## Zainicjowanie projektu OpenTofu
 
@@ -43,11 +43,16 @@ Lista popularnych narzędz OSS do skanowania kodu, które często widzimy -- [ar
 
 ## Polityki z Rego (OpenPolicyAgent)
 
-Przykład z artykułu [TF at scale](https://spacelift.io/blog/scalable-infrastructure):
+Przykład z artykułu [OpenTofu/TF at scale](https://spacelift.io/blog/scalable-infrastructure):
+
+- Przykłady polityk:
+
+  - [ostrzeż, jeśli będziemy kasować](https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/blob/main/catalog/policies/plan.warn-on-deletions-and-recreations.rego),
+  - [tagi wymagane](https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/blob/main/catalog/policies/plan.warn-on-deletions-and-recreations.rego).
 
 - przykład wykorzystania `conftest` (https://www.conftest.dev/examples/)
 
-- bardziej złożona:
+- bardziej złożona z [Spacelifowej biblioteki polityk](https://github.com/spacelift-io/spacelift-policies-example-library/):
 
   ```rego
   package spacelift

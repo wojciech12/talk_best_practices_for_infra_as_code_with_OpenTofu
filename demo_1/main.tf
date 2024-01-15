@@ -9,7 +9,7 @@ variable "repository_name" {
 
 resource "github_repository" "my_repo" {
   name        = var.repository_name
-  description = "My Azure App repository created by OpenTofu!"
+  description = "My App repository created by OpenTofu!"
 
   visibility = "public"
 }

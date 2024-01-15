@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>10 najlepszych praktyk dla Infrastructure-as-a-Code na przykładzie OpenTofu/Terraforma</title>
+		<title>10 najlepszych praktyk dla Infrastructure-as-Code na przykładzie OpenTofu</title>
 
 		<!-- bootstrap -->
 		<link rel="stylesheet" href="ext/bootstrap-5.3.0-alpha3/bootstrap.min.css">
@@ -36,6 +36,11 @@
 			.reveal h3 {
 				text-transform: none;
 			}
+
+			.reveal h4 {
+				text-transform: none;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -44,17 +49,17 @@
 			<div class="slides">
 				<section>
 
-					<h3>10 najlepszych praktyk<br /> dla Infrastructure-as-a-Code</h3>
+					<h3>10 najlepszych praktyk<br /> dla Infrastructure-as-Code</h3>
 
 					<img width="30%" src="img/openfotu-on-light.png" />
 
-					<p><small>Wojciech Barczynski | Spacelift.io</small></p>
+					<p><small>Wojciech Barczyński | VPE | Spacelift.io</small></p>
 				</section>
 
 				<section data-markdown>
 					<script type="text/template">
 
-### Co to jest OpenTofu / Terraform?
+### Co to jest OpenTofu/Terraform?
 
 [Demo](https://github.com/wojciech12/talk_best_practices_for_infra_as_a_code_with_Terraform/tree/master/demo_1):
 
@@ -73,16 +78,28 @@ resource "github_repository" "my_repo" {
 				</section>
 
 				<section data-markdown>
+					<script type="text/template">
+
+### Dlaczego IaC?
+
+- Clickops 💀
+- skrypty CLI z if/else - 😑
+- trudno śledzić zmiany
+- ciężko pracować w zespole
+					</script>
+				</section>
+
+				<section data-markdown>
 					<script type="text/template">				
 ### Dlaczego OpenTofu/Terraform FOSS?
 
-1. <code>tofu plan</code> – co się zmieni
+1. <code>tofu plan</code> – co się zmieni;
 2. <code>tofu apply</code> – wykonanie planu;
-3. plik stanu – korzyści ([demo](https://github.com/wojciech12/talk_best_practices_for_infra_as_a_code_with_Terraform/tree/master/demo_2)):
+3. plik stanu – korzyści ([demo 2](https://github.com/wojciech12/talk_best_practices_for_infra_as_a_code_with_Terraform/tree/master/demo_2)):
    
-   - shifting X left,
-   - polityki,
-   - drift detection.
+   - shift left X;
+   - polityki, lintery, skanery;
+   - detekcja driftu.
 					</script>
 				</section>
 
@@ -100,21 +117,21 @@ resource "github_repository" "my_repo" {
 
 				<section data-markdown>
 					<script type="text/template">
-### Infrastructure-as-a-Code
+### Infrastructure-as-Code
 
-Cel, gwiazda północy:
+Cel/gwiazda północy projektu IaC:
 
 - zaangażowanie najszerszej grupy inżynierów;
-- zaagażowanie: można zajrzeć do środka i kontrybuować;
-- zaagażowanie: blisko konsumentów zasobów.
+- zaagażowanie = blisko zespołow produktowych;
+- zaagażowanie = można zajrzeć do środka i kontrybuować.
 					</script>
 				</section>
 
 				<section data-markdown>
 					<script type="text/template">
-### Infrastructure-as-a-Code
+### Infrastructure-as-Code
 
-Niewłaściwe podejście na początku może prowadzić do trudności później.
+Błędy na początku drogi, mszczą się później.
 					</script>
 				</section>
 
@@ -122,11 +139,13 @@ Niewłaściwe podejście na początku może prowadzić do trudności później.
 					<script type="text/template">
 ### 1/10: Remote state
 
-Implementacje z locks:
+Implementacje ze wsparciem dla blokad:
 
-- Azure storage ([docs](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?));
 - AWS S3 + DynamoDB;
-- Google Cloud Storage.
+- Azure storage ([docs](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?));
+- Google Cloud Storage ([docs]()).
+
+<small>koniecznie włącz szyfrowanie</small>
 					</script>
 				</section>
 
@@ -187,9 +206,10 @@ Close to the application:
 					<script type="text/template">
 ### 2/10: Struktura projektu
 
-- copy&paste jest najłatwiejszym długiem do spłacenia;
+- Copy&paste jest najłatwiejszym długiem do spłacenia;
 - Nie musisz od pierwszego dnia mieć własne moduły;
-- Wykorzystuj dostępne moduły z community.
+- Wykorzystuj dostępne moduły z community;
+- Jak z bibliotekami, często lepiej później niż wcześniej.
 					</script>
 				</section>
 
@@ -199,7 +219,7 @@ Close to the application:
 
 - Najmniejszy możliwy, na przykład, per komponent;
 - Unikamy czytania wartości z innych stanów;
-- Bardzo łatwo o rigid infrastructure :/.
+- Bardzo łatwo o rigid infrastructure 💀.
 					</script>
 				</section>
 
@@ -209,7 +229,8 @@ Close to the application:
 
 - Wymagane wysokie uprawnienia do zarządzania,
 - Twarde zależności między stanami,
-- Zbyt (wcześnie) opinionated moduły,
+- Odczytywanie stanów innych stacków 💀,
+- Zbyt wcześnie i za bardzo opinionated moduły,
 - Cykliczne zależności.
 					</script>
 				</section>		
@@ -218,38 +239,40 @@ Close to the application:
 					<script type="text/template">
 ### 3/10: Rozwiązanie
 
-- odczytywanie stanu zasobów z chmury;
+- `data` - odczytywanie stanu zasobów z chmury
 - **key/value store** (Azure Config / AWS SSM / HC Consul);
-- Spacelift: [context](https://docs.spacelift.io/concepts/configuration/context) oraz [stack dependencies](https://docs.spacelift.io/concepts/stack/stack-dependencies).
+- Spacelift ([TACOS](https://www.youtube.com/watch?v=4MLBpBqZmpM)): [context](https://docs.spacelift.io/concepts/configuration/context) oraz [stack dependencies](https://docs.spacelift.io/concepts/stack/stack-dependencies).
 					</script>
 				</section>
 
 				<section data-markdown>
 					<script type="text/template">
-### 5/10: Konwencje nazewnictwa
+### 4/10: Konwencje nazewnictwa
 
-1. Używaj podkreśleń(_) jako seperatorów w nazwach. Pisz nazwy małymi literami.
-2. Nie dodawaj typu zasobu do nazw zasobów.
-3. Zawsze używaj opisowych nazw dla zmiennych wejściowych (variables) i wyjściowych (outputs). Używaj opisów! (description)
+1. Używaj podkreśleń(_) jako seperatorów w nazwach.
+2. Pisz nazwy małymi literami.
+3. Nie dodawaj typu zasobu do nazw zasobów.
+4. Zawsze używaj opisowych nazw dla zmiennych wejściowych (variables) i wyjściowych (`outputs`). Opisz je (`description`).
 					</script>
 				</section>
 				<!-- https://spacelift.io/blog/terraform-best-practices#6-use-a-consistent-naming-convention -->
 
 				<section data-markdown>
 					<script type="text/template">
-### 5/10: Konwencje nazewnictwa
+### 4/10: Konwencje nazewnictwa
 
 Więcej na:
 
-- [Developer Terraform Docs](https://developer.hashicorp.com/terraform/plugin/best-practices/naming),
-- [Microsoft Azure](https://microsoft.github.io/code-with-engineering-playbook/continuous-delivery/recipes/terraform/terraform-structure-guidelines/),
+- [Developer Terraform Docs](https://developer.hashicorp.com/terraform/plugin/best-practices/naming);
+- [Cloudposse best practices](https://docs.cloudposse.com/category/best-practices/);
+- Według: [AWS](), [Azure](https://microsoft.github.io/code-with-engineering-playbook/continuous-delivery/recipes/terraform/terraform-structure-guidelines/), [GCP](https://cloud.google.com/docs/terraform/best-practices-for-terraform);
+- [Spacelift blog](https://spacelift.io/blog);
 - np., [terraform-null-label](https://github.com/cloudposse/terraform-null-label).
 					</script>
 				</section>
-				<!-- https://microsoft.github.io/code-with-engineering-playbook/continuous-delivery/recipes/terraform/terraform-structure-guidelines/ -->
 
 				<section>
-					<h3>6/10: Pinning wersji dla wszystkiego</h3>
+					<h3>5/10: Pinning wersji dla wszystkiego</h3>
 					<div class="container">
 
 						<div class="row">
@@ -270,23 +293,11 @@ Więcej na:
 					<script type="text/template">
 ### 6/10: Narzędzia
 
-1. <code>tofu plan</code> - daje nam możliwość sprawdzenia zmian przed ich zaaplikowaniem,
+1. <code>tofu plan</code> - daje nam możliwość sprawdzenia zmian przed ich zaaplikowaniem;
 
-2. Czyli możemy weryfikacje przesunąć w „lewo” - sprawdzamy co zostanie uruchomione i/lub zmienione jeszcze przed zmianą infrastruktury.
-
+2. shift-left X, gdzie X - najlepsze praktyki, bezpieczeństwo, polityki.
 					</script>
 				</section>
-
-				<!-- section data-markdown>
-					<script type="text/template">
-### 6. Narzędzia
-
-Warto dodać do CI/CD albo git .pre-commit:
-
-- Formatowanie: `tofu fmt`
-
-					</script>
-				</section -->
 
 				<section data-markdown>
 					<script type="text/template">
@@ -294,9 +305,9 @@ Warto dodać do CI/CD albo git .pre-commit:
 
 Warto dodać do CI/CD albo git .pre-commit:
 
-- Lintery: `tofu fmt` & `tflint`
-- Bezpieczeństwo: `tfsec`, `kics` i `checkov`
-- Estymacja kosztów: `tf-cost-estimation` & `infracost`
+- Lintery: `tofu fmt` & `tflint`;
+- Bezpieczeństwo: `tfsec`, `kics` i `checkov`;
+- Estymacja kosztów: `tf-cost-estimation` & `infracost`.
 					</script>
 				</section>
 
@@ -311,7 +322,38 @@ Warto dodać do CI/CD albo git .pre-commit:
   - [Ostrzeż, że kasujemy lub odtwarzamy](https://github.com/cloudposse/terraform-spacelift-cloud-infrastructure-automation/blob/main/catalog/policies/plan.warn-on-deletions-and-recreations.rego),
   - [Etykiety na zasobach wymagane](https://github.com/spacelift-io/spacelift-policies-example-library/blob/main/plan/enforce-tags-on-resources.rego).
 
-<p><small>TACOS takie jak Spacelift, Env0, Scalr mają gotowe integracje</small></p>
+<p><small>TACOS takie jak [Spacelift](https://spacelift.io/blog/integrating-security-tools-with-spacelift), Env0, Scalr mają gotowe integracje</small></p>
+					</script>
+				</section>
+
+				<section>
+				<h4>7/10: YOLO from laptop</h4>
+				<div class="container">
+					<div class="row">
+						<div class='col-md-6'>
+							<img width="90%" src="https://pbs.twimg.com/media/FQyZY06WQAQD5iW?format=jpg&name=small" />
+							<small>https://twitter.com/mtcderek</small>
+						</div>
+						<div class='col-md-5'>
+							<ul>
+								<li>Uff, luckily it was my test env</li>
+								<li>...</li>
+								<li>...</li>
+								<li>🚨</li>
+							</ul>
+							<br />
+							<br />
+						</div>
+					</div>
+				</div>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 7/10: Continuous Deployment
+
+1. Warto zacząć od Continuous Integration, nawet kiedy odpalasz OpenTofu z laptopa;
+2. Kiedy demokratyzujemy dostęp i skalujemy, Continuous Deployment jest niezbędne.
 					</script>
 				</section>
 
@@ -319,10 +361,8 @@ Warto dodać do CI/CD albo git .pre-commit:
 					<script type="text/template">
 ### 7/10: Continuous Deployment
 
-1. Warto zacząć od Continuous Integration;
-2. Kiedy demokratyzujemy dostęp i skalujemy, Continuous Deployment jest niezbędne;
-
-Opcje: generic CI, Atlantis (open source), Env0, Scalr, Spacelift.io.
+- generic CI/CD;
+- TACOS: Atlantis, Env0, Scalr, Spacelift.io.
 					</script>
 				</section>
 
@@ -332,9 +372,11 @@ Opcje: generic CI, Atlantis (open source), Env0, Scalr, Spacelift.io.
 
 To tylko kwestia czasu:
 
-- Rośnie zespół,
-- Trudno zatrudnić Platform czy System Cloud/DevOps inżynierów,
-- Product teams.
+- Zespóły produktowe rosną szybko;
+- Trudno zatrudnić Platform czy System Cloud/DevOps inżynierów;
+- Budget?
+- CTO dlaczego ktoś czeka na X?;
+- Product teams!
 					</script>
 				</section>
 
@@ -342,8 +384,10 @@ To tylko kwestia czasu:
 					<script type="text/template">
 ### 8/10: Demokratyzacja
 
-1. Zaczynamy od jednej osoby w zespole, np. infra champion,
-2. Opcjonalnie - przydzielmy jedną osobę z zespołu DevOps / platformy (tymczasowo).
+Jak zacząć:
+
+1. Zaczynamy od jednej osoby w zespole, np. infra/IaC champion;
+2. Opcjonalnie - przydzielmy jedną osobę z zespołu DevOps/platformy (tymczasowo).
 					</script>
 				</section>
 
@@ -354,10 +398,9 @@ To tylko kwestia czasu:
 Będzie łatwiej:
 
 1. Jeśli nie mamy hard dependencies między stanami;
-2. Nie potrzeba najwyższych uprawnień do postawienia każdego z serwisów.
+2. Nie potrzeba najwyższych uprawnień do postawienia zasobów chmurowych dla serwisów.
 					</script>
 				</section>
-
 
 				<section data-markdown>
 					<script type="text/template">
@@ -365,10 +408,10 @@ Będzie łatwiej:
 
 Będzie łatwiej:
 
-- Dobrze mieć CD na generycznym CI lub TACOS,
-- Praca oparta o Pull Request'ach,
-- W pierwszej iteracji, może być copy&paste planu w Pull Request,
-- Więcej wspólnych (małych) modułów.
+- Dobrze mieć CD na generycznym CI lub TACOS;
+- Praca oparta o Pull Request'ach;
+- W pierwszej iteracji, może być copy&paste planu w PR;
+- Małe/generyczne wspólne moduły.
 					</script>
 				</section>
 
@@ -391,13 +434,44 @@ Będzie łatwiej:
 
 				<section data-markdown>
 					<script type="text/template">
+### 8/10: Demokratyzacja
+
+TACOS - prosty workflow z PRem:
+
+- Otwórz PR;
+- [Spacelift](https://spacelift.io/how-it-works) uruchomi:
+	
+  - `plan` i zwaliduje zmiany,
+  - workflow customization (np., `tfsec`),
+  - run polices against the changes,
+  - trigger approval process.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 8/10: Demokratyzacja
+
+TACOS - prosty workflow z PRem:
+
+- PR merged;
+- [Spacelift](https://spacelift.io/how-it-works) uruchomi:
+	
+  - co powyżej lub specificzna konfiguracja,
+  - apply the changes,
+  - uruchomi downstream stacks (dependencies).
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
 ### 9/10: Skalowanie
 
-- Template-y dla nowych serwisów,
-- Współdzielenie najlepszych praktyk i polityk,
-- Więcej wspólnych modułów,
-- Tymczasowe środowiska,
-- Drift-detection.
+- Template-y dla nowych serwisów;
+- Współdzielenie najlepszych praktyk i polityk;
+- Więcej wspólnych modułów;
+- Tymczasowe środowiska;
+- Drift-detection (managed i unmanaged).
 					</script>
 				</section>
 
@@ -407,10 +481,11 @@ Będzie łatwiej:
 
 Template-y dla nowych serwisów:
 
-- Konwencje,
-- No-black magic,
-- Nie jestem fanem, custom YAML czy JSON,
-- Możliwe uruchomienie lokalne.
+- Konwencje;
+- No-black magic;
+- Lekka warstwa HCL, YAML, czy JSON albo CRD;
+- Self-service;
+- Oczywiście dev musi mieć możliwość uruchomienia dev lokalnie;
 					</script>
 				</section>
 
@@ -420,9 +495,10 @@ Template-y dla nowych serwisów:
 
 Drift detection:
 
-- Zmiany w konsoli na chwilę,
-- Upewnienie się, że rzadko dotykany moduł działa,
-- Sprzątanie po eksperymentach.
+- Zmiany w konsoli na chwilę;
+- Upewnienie się, że rzadko dotykany moduł działa;
+- Sprzątanie po eksperymentach;
+- Śledzenie postępów w projektach clickops do IaC.
 					</script>
 				</section>
 
@@ -433,7 +509,6 @@ Drift detection:
 Mono repozytorium czy repozytorium per komponent:
 
 - To zależy od firmy.
-
 					</script>
 				</section>
 
@@ -450,18 +525,16 @@ Mono repozytorium czy repozytorium per komponent:
 				<section data-background="img/high_perf_engineering.png" data-background-repeat="" data-background-size="100%">
 				</section>
 
-
 				<section data-markdown>
 					<script type="text/template">
 ### 10/10: Metryki
 
 Deployment frequency:
 
-1. Łatwe do uchwycenia przy gitops,
+1. Łatwe do uchwycenia przy gitops;
 2. Zakończenie pipeline lub po prostu merge do brancha produkcyjnego.
 					</script>
 				</section>
-
 
 				<section data-markdown>
 					<script type="text/template">
@@ -469,8 +542,8 @@ Deployment frequency:
 
 Lead time:
 
-1. Od utworzenia Pull Request jako draft
-2. Do wprowadzenia na produkcję (merge do master/prod)
+1. Od utworzenia Pull Request jako DRAFT;
+2. Do wprowadzenia na produkcję (merge do master/prod).
 					</script>
 				</section>
 
@@ -480,8 +553,19 @@ Lead time:
 
 Obecnie używam:
 
-- Google Colab Notebook,
-- Exportery do Google BigQuery z: Github oraz ClickUp.
+- Metabase + dbt + python experter z Github;
+- Wcześniej Google Colab Notebook na Google BigQuery.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 10/10: Metryki
+
+Później:
+
+- Ilość kontrybutorów spoza Platform/Infra/DevOps team;
+- Pozostałe metryki [DORA](https://dora.dev/): MTTR i failure-rate.
 					</script>
 				</section>
 
@@ -489,9 +573,9 @@ Obecnie używam:
 					<script type="text/template">
 ### Podsumowanie
 
-- Celem jest zaangażowanie najszerszej grupy inżynierów,
-- Terraform/Opentofu jest najbardziej dojrzałą platformą,
-- Większość tych praktyk, stosuje się do innych platform od AWS CloudFormation, CDK, CDK-TF, po Kubernetes.
+- Celem jest zaangażowanie najszerszej grupy inżynierów;
+- Opentofu i Terraform jest najbardziej solidnym narzędziem;
+- Większość praktyk, stosuje się do od AWS CloudFormation, CDK, CDK-TF, po Kubernetes.
 					</script>
 				</section>
 
@@ -501,8 +585,9 @@ Obecnie używam:
 
 Często zadawane pytanie:
 
-- OpenTofu/Terraform do postawienia K8S + ArgoCD, Crossplane, lub flux (last mile);
-- Gitops na Kubernetesie przejmuje life-cycle aplikacji.
+- OpenTofu i Terraform do postawienia K8S + ArgoCD, Crossplane, lub flux (last mile);
+- ArgoCD manages apps on Kubernetes;
+- Spacelift operator - last mile cloud resources. 
 					</script>
 				</section>
 
@@ -514,10 +599,12 @@ Często zadawane pytanie:
 								<!-- https://www.flickr.com/photos/mustadmarine/49842649546/ -->
 							</div>
 							<div class='col-md-6'>
-								<h3>Dziękuję<br />za uwagę</h3>
-								<br />
+								<h3>Pytania</h3>
 								<br />
 								<p><small><a href="https://github.com/wojciech12/talks">github.com/wojciech12/talks</a></small></p>
+								<br />
+								<br /><small>ps. Hiring Frontend and Backend engineers:<br /><a href="https://spacelift.io/careers">spacelift.io/careers</a></small>
+								<br />
 							</div>
 						</div>
 					</div>
@@ -530,17 +617,6 @@ Często zadawane pytanie:
 <!-- img width="70%" src="img/Rubber_Duck_Sea_by_whispering_hills_1000_673_84_c1.jpg" -->
 				</script>
 			</section>
-
-				<section data-markdown>
-					<script type="text/template">
-### Kubernetes and OpenTofu/Terraform
-
-Często padające pytanie:
-
-- OpenTofu/Terraform do postawienia K8S + ArgoCD, Crossplane, lub flux (last mile);
-- Gitops na Kubernetesie przejmuje life-cycle aplikacji.
-					</script>
-				</section>
 
 				<section data-markdown>
 					<script type="text/template">

@@ -1,4 +1,4 @@
-# Co to jest OpenTofu/Terraform?
+# Co to jest OpenTofu i IaC?
 
 ```bash
 brew install opentofu
